@@ -9,6 +9,7 @@ public class PlanRequestDto {
     private Long id;
     private String todo;
     private String name;
+    private String password;
     private Timestamp create_at;
     private Timestamp update_at;
 }

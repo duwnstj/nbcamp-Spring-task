@@ -3,19 +3,33 @@ package com.sparta.springhomework.controller;
 import com.sparta.springhomework.dto.PlanRequestDto;
 import com.sparta.springhomework.dto.PlanResponseDto;
 import com.sparta.springhomework.service.PlanService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class PlanController {
-    @PostMapping("/plans")
-    public PlanResponseDto createPlan(@RequestBody PlanRequestDto planRequestDto) {
-        PlanService planService = new PlanService();
-        return planService.createPlan(planRequestDto);
+    private final JdbcTemplate jdbcTemplate;
 
+    public PlanController(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @PostMapping("/plans")
+    // 일정 생성
+    public PlanResponseDto createPlan(@RequestBody PlanRequestDto requestDto) {
+        PlanService planService = new PlanService(jdbcTemplate);
+        return planService.createPlan(requestDto);
+
+    }
+
+    @GetMapping("/plans/{id}")
+    //일정 단건 조회
+    public List<PlanResponseDto> getPlan(@PathVariable Long id) {
+        PlanService planService = new PlanService(jdbcTemplate);
+        return planService.getPlan(id);
     }
 
 
